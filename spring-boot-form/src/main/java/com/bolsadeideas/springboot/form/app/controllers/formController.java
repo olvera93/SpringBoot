@@ -1,11 +1,14 @@
 package com.bolsadeideas.springboot.form.app.controllers;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +34,9 @@ public class formController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.addValidators(validador); // Se agrega un nuevo validor al stack
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false); // define si el analizador que va a realizar un analisis si es estricto o tolerante
+		binder.registerCustomEditor(Date.class, "fechaNacimiento", new CustomDateEditor(dateFormat, true));
 	}
 
 	@GetMapping("/form")
