@@ -2,6 +2,7 @@ package com.bolsadeideas.springboot.form.app.models.domain;
 
 import java.util.Date;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Max;
@@ -49,10 +50,13 @@ public class Usuario {
 	private Integer cuenta;
 
 	@NotNull
-	//@Past
-	@Future
+	@Past
+	//@Future
 	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaNacimiento;
+	
+	@Valid //Se indica que se validen los objetos relacionados
+	private Pais pais;
 	
 	
 	public String getUsername() {
@@ -118,6 +122,16 @@ public class Usuario {
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
+
+	public Pais getPais() {
+		return pais;
+	}
+
+	public void setPais(Pais pais) {
+		this.pais = pais;
+	}
+	
+	
 	
 	
 	
