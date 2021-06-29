@@ -20,14 +20,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.bolsadeideas.springboot.form.app.editors.NombreMayusculaEditor;
 import com.bolsadeideas.springboot.form.app.editors.PaisPropertyEditor;
+import com.bolsadeideas.springboot.form.app.editors.RolesEditor;
 import com.bolsadeideas.springboot.form.app.models.domain.Pais;
+import com.bolsadeideas.springboot.form.app.models.domain.Role;
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
 import com.bolsadeideas.springboot.form.app.services.PaisService;
+import com.bolsadeideas.springboot.form.app.services.RoleService;
 import com.bolsadeideas.springboot.form.app.validation.UsuarioValidador;
 
 @Controller
@@ -42,6 +46,12 @@ public class formController {
 	
 	@Autowired
 	private PaisPropertyEditor paisEditor;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private RolesEditor roleEditor;
 
 	// Cuando se inicializa el proceso de valdidacion y el proceso de datos en el
 	// usuario
@@ -57,8 +67,19 @@ public class formController {
 		binder.registerCustomEditor(String.class, "apellido", new NombreMayusculaEditor());
 		
 		binder.registerCustomEditor(Pais.class, "pais", paisEditor);
+		binder.registerCustomEditor(Role.class, "roles", roleEditor);
 
 		
+	}
+	
+	@ModelAttribute("genero")
+	public List<String> genero() {
+		return Arrays.asList("Hombre", "Mujer");
+	}
+	
+	@ModelAttribute("listaRoles")
+	public List<Role> listaRoles() {
+		return this.roleService.listar();
 	}
 
 	@ModelAttribute("listaPaises")
@@ -74,6 +95,17 @@ public class formController {
 		roles.add("ROLE_MODERATOR");
 		
 		return roles;
+	}
+	
+	@ModelAttribute("listaRolesMap")
+	public Map<String, String> listaRolesMap() {
+		Map<String, String> roles = new HashMap<String, String>();
+		roles.put("ROLE_ADMIN", "Administrador");
+		roles.put("ROLE_USER", "Usuario");
+		roles.put("ROLE_MODERATOR", "Moderador");
+		
+		return roles;
+
 	}
 	
 
@@ -103,17 +135,22 @@ public class formController {
 		usuario.setNombre("John");
 		usuario.setApellido("Doe");
 		usuario.setIdentificador("123.456.789-K");
+		usuario.setHabilitar(true);
+		usuario.setValorSecreto("Algún valor secreto ****");
+		usuario.setPais(new Pais(2, "MX", "México"));
+		usuario.setRoles(Arrays.asList(new Role(2, "Usuario", "ROLE_USER")));
 		model.addAttribute("titulo", "Formulario usuarios");
 		model.addAttribute("usuario", usuario);
 		return "form";
 	}
 
 	@PostMapping("/form")
-	public String procesar(@Valid Usuario usuario, BindingResult result, Model model, SessionStatus status) {
+	public String procesar(@Valid Usuario usuario, BindingResult result, Model model) {
 		// validador.validate(usuario, result);
-		model.addAttribute("titulo", "Resultado form");
 
 		if (result.hasErrors()) {
+			model.addAttribute("titulo", "Resultado form");
+
 			/*
 			 * Map<String, String> errores = new HashMap<>();
 			 * result.getFieldErrors().forEach(err -> { errores.put(err.getField(),
@@ -121,12 +158,22 @@ public class formController {
 			 * )); }); model.addAttribute("error", errores);
 			 */
 			return "form";
-
 		}
 
-		model.addAttribute("usuario", usuario);
+		return "redirect:/ver";
+	}
+	
+	@GetMapping("/ver")
+	public String ver(@SessionAttribute(name = "usuario", required = false) Usuario usuario, Model model, SessionStatus status) {
+		
+		if (usuario == null) {
+			return "redirect:/form";
+		}
+		
+		model.addAttribute("titulo", "Resultado form");
+		
 		status.setComplete();
 		return "resultado";
 	}
-
+	
 }
