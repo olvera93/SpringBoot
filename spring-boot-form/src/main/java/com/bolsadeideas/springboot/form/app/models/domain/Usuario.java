@@ -1,6 +1,7 @@
 package com.bolsadeideas.springboot.form.app.models.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -55,8 +56,12 @@ public class Usuario {
 	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaNacimiento;
 	
-	@Valid //Se indica que se validen los objetos relacionados
+	@NotNull
+	//@Valid //Se indica que se validen los objetos relacionados
 	private Pais pais;
+	
+	@NotEmpty
+	private List<String> roles;
 	
 	
 	public String getUsername() {
@@ -130,6 +135,15 @@ public class Usuario {
 	public void setPais(Pais pais) {
 		this.pais = pais;
 	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
 	
 	
 	
