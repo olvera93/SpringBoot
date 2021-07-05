@@ -11,6 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author Olvera Monroy Gonzalo
@@ -24,13 +29,21 @@ public class Cliente implements Serializable {
 	@Id // Indica que el atributo es la llave
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
+	@NotEmpty
 	private String nombre;
+	
+	@NotEmpty
 	private String apellido;
+	
+	@NotEmpty
+	@Email
 	private String email;
 
+	@NotNull
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE) // Indica el formato que se va a guardar
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
 
 	public Long getId() {
@@ -69,7 +82,7 @@ public class Cliente implements Serializable {
 		return createdAt;
 	}
 
-	public void setCreateAt(Date createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 
