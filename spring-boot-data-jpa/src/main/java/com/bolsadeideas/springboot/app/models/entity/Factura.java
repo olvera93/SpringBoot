@@ -3,6 +3,7 @@ package com.bolsadeideas.springboot.app.models.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -110,6 +111,19 @@ public class Factura implements Serializable {
 		items.add(item);
 	}
 
+	public Double getTotal() {
+		Double total = 0.0;
+		
+		int size = items.size();
+		
+		for (int i = 0; i < size; i++) {
+			total += items.get(i).calcularImporte();
+		}
+		
+		return total;
+		
+	}
+	
 	private static final long serialVersionUID = 1L;
 
 }
