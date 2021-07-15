@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "faturas_items")
+@Table(name = "facturas_items")
 public class ItemFactura implements Serializable {
 
 	@Id

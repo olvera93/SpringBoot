@@ -27,7 +27,7 @@ import javax.persistence.TemporalType;
  */
 
 @Entity
-@Table(name = "faturas")
+@Table(name = "facturas")
 public class Factura implements Serializable {
 
 	@Id
@@ -44,7 +44,7 @@ public class Factura implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Cliente cliente;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "factura_id")
 	private List<ItemFactura> items;
 	
