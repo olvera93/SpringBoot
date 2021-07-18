@@ -1,39 +1,35 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
-
-<script type="text/javascript" th:fragment="javascript">
-
-	$(document).ready(function() { // Asegurarse que este completamente cargado
-		$("#buscar_producto").autocomplete({ // recibe un 
-			source: function(request, response) { // se encarga de realizar la petición a ajax 
-				$.ajax({
-					url: "/factura/cargar-productos/" + request.term, // El parametro "term" se obtiene el valor que el usuario este escribiendo
-					dataType: "json",
-					data: {
-						term: request.term // es para obtener el producto
-					},
-					success: function(data) { // Se encarga de recibir los datos en formato JSON
-						response($.map(data, function(item){ // Se le pasa al autocomplete, "map" se encarga de realizar un proceso por cada elemento del arreglo, cada elemento que contenga el data
-							return {
-								value: item.id,
-								label: item.nombre,
-								precio: item.precio,
-							};
-						}));
-					},
-				});
-			},
-			select: function(event, ui) { // Se encarga de procesar el resultado
-				$("#buscar_producto").val(ui.item.label);
-				return false;
-			}
-		});
-	}
-	);
 
 
-</script>
-
-</body>
-</html>
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <body>
+    	<script type="text/javascript" th:fragment="javascript">
+    		$(document).ready(function() { // Asegurarse que este completamente cargado
+    			$("#buscar_producto").autocomplete({ // recibe un 
+    				source : function(request, response) {
+    					$.ajax({
+    						url : "/factura/cargar-productos/" + request.term, // El parametro "term" se obtiene el valor que el usuario este escribiendo
+    						dataType : "json",
+    						data : {
+    							term : request.term // es para obtener el producto
+    						},
+    						success : function(data) { // Se encarga de recibir los datos en formato JSON
+    							response($.map(data, function(item) { // Se le pasa al autocomplete, "map" se encarga de realizar un proceso por cada elemento del arreglo, cada elemento que contenga el data
+    								return {
+    									value : item.id,
+    									label : item.nombre,
+    									precio : item.precio,
+    								};
+    							}));
+    						},
+    					});
+    				},
+    				select : function(event, ui) { // Se encarga de procesar el resultado
+    					$("#buscar_producto").val(ui.item.label);
+    					return false;
+    				}
+    			});
+    		});
+    	</script>
+    </body>
+    </html>
