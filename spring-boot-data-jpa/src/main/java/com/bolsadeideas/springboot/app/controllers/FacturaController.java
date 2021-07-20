@@ -1,6 +1,7 @@
 package com.bolsadeideas.springboot.app.controllers;
 
 import java.util.List;
+
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -27,6 +28,11 @@ import com.bolsadeideas.springboot.app.models.entity.ItemFactura;
 import com.bolsadeideas.springboot.app.models.entity.Producto;
 import com.bolsadeideas.springboot.app.models.service.IClienteService;
 
+/**
+ * @author Olvera Monroy Gonzalo
+ *
+ */
+
 @Controller
 @RequestMapping("/factura")
 @SessionAttributes("factura")
@@ -41,7 +47,7 @@ public class FacturaController {
 	public String ver(@PathVariable(value = "id") Long id, 
 			Model model, RedirectAttributes flash) {
 		
-		Factura factura = clienteService.findFacturaById(id);
+		Factura factura = clienteService.fetchFacturaByIdWithClienteWhithItemFacturaWithProducto(id); //clienteService.findFacturaById(id);
 		
 		if (factura == null) {
 			flash.addFlashAttribute("error", "La factura no existe en la base de datos!");

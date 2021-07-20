@@ -15,6 +15,11 @@ import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.models.entity.Factura;
 import com.bolsadeideas.springboot.app.models.entity.Producto;
 
+/**
+ * @author Olvera Monroy Gonzalo
+ *
+ */
+
 @Service
 public class ClienteServiceImpl implements IClienteService{
 
@@ -89,6 +94,13 @@ public class ClienteServiceImpl implements IClienteService{
 	public void deleteFactura(Long id) {
 		facturaDao.deleteById(id);
 		
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Factura fetchFacturaByIdWithClienteWhithItemFacturaWithProducto(Long id) {
+		// TODO Auto-generated method stub
+		return facturaDao.fecthByIdWithClienteWhithItemFacturaWithProducto(id);
 	}
 
 }

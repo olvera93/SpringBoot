@@ -9,6 +9,11 @@ import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.models.entity.Factura;
 import com.bolsadeideas.springboot.app.models.entity.Producto;
 
+/**
+ * @author Olvera Monroy Gonzalo
+ *
+ */
+
 public interface IClienteService {
 
 	public List<Cliente> findAll();
@@ -30,4 +35,6 @@ public interface IClienteService {
 	public Factura findFacturaById(Long id);
 	
 	public void deleteFactura(Long id);
+	
+	public Factura fetchFacturaByIdWithClienteWhithItemFacturaWithProducto(Long id);
 }
