@@ -1,7 +1,6 @@
 package com.bolsadeideas.springboot.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -26,6 +25,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private LoginSuccessHandler successHandler;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	/*
 	 * Este metodo es para hacer algunas rutas publicas 
@@ -53,16 +55,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.exceptionHandling().accessDeniedPage("/error_403");
 	}
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 	
 	
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception { // Para el inicio de sesion de los usuarios
 		
-		PasswordEncoder encoder = passwordEncoder();
+		PasswordEncoder encoder = this.passwordEncoder;
 		UserBuilder users = User.builder().passwordEncoder(encoder::encode);
 		
 		builder.inMemoryAuthentication()
