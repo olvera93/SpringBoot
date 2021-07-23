@@ -1,5 +1,7 @@
 package com.bolsadeideas.springboot.app;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,6 +30,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private DataSource dataSource; //Para conectar a la base de datos
 	
 	/*
 	 * Este metodo es para hacer algunas rutas publicas 
@@ -61,11 +66,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception { // Para el inicio de sesion de los usuarios
 		
 		PasswordEncoder encoder = this.passwordEncoder;
-		UserBuilder users = User.builder().passwordEncoder(encoder::encode);
+		
+		builder.jdbcAuthentication()
+		.dataSource(dataSource)
+		.passwordEncoder(passwordEncoder)
+		.usersByUsernameQuery("select username, password, enabled from users where username=?")
+		.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id=u.idusers) where u.username=?");
+		
+		/*UserBuilder users = User.builder().passwordEncoder(encoder::encode);
 		
 		builder.inMemoryAuthentication()
 		.withUser(users.username("admin").password("12345").roles("ADMIN", "USER"))
-		.withUser(users.username("gonzalo").password("12345").roles("USER"));
+		.withUser(users.username("gonzalo").password("12345").roles("USER"));*/
 		
 	}
 	
